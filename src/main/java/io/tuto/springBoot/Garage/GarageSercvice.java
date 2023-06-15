@@ -1,36 +1,48 @@
 package io.tuto.springBoot.Garage;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GarageSercvice {
-	
-	 static private ArrayList<Car> cars = new ArrayList<>(Arrays.asList(
-			 
-			 new Car(4,"totyota","model 2003", 2004, Car.Color.BLEU),
-			 new Car(7,"Dacia","model 2010", 2010, Car.Color.YELLOW),
-			 new Car(9,"Renou","model 2019", 2019, Car.Color.RED),
-			 new Car(10,"BM","model 2016", 2026, Car.Color.BLEU),
-			 new Car(11,"AUDI","model 2008", 2077, Car.Color.GREEN)
-			
-			
-			));
+	@Autowired 
+	private GarageRepository garageRepository;
+
+	static private ArrayList<Car> cars = new ArrayList<>();
+
+	public List<Car> getAllCars() {
+		ArrayList<Car> listCars = new ArrayList<>();
+		garageRepository.findAll().forEach(car -> {
+			listCars.add(car);
+		});
+		return listCars;
+	}
+
+	public Optional<Car> getCarByID(long id) {
+		return garageRepository.findById(id);
+
+	}
+
+	public void deleteCarByID(long id) {
+		
+		garageRepository.deleteById(id);
+
+	}
+
+	public void addCar(Car car) {
+		garageRepository.save(car);
+	}
+
+	public void upDate(Car car, long id) {
+
+		garageRepository.save(car);
 
 	
-      public List<Car> getAllCars(){
-		return cars;
-    	  
-      }
-      
-      public Car getCarByID(long id) {
-    	  Car car =  cars.stream()
-    				.filter(t -> id == (t.getId()))
-    				.findFirst()
-    				.orElse(null);
-    				
-    		    return car;
-    		}
-      }
 
+	}
+
+}
